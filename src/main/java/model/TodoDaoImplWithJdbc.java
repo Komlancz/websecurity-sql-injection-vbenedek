@@ -15,12 +15,20 @@ public class TodoDaoImplWithJdbc implements TodoDao {
 
     @Override
     public void add(Todo todo) {
-        String query = "INSERT INTO todos (title, id, status) " +
-                "VALUES ('" + todo.title + "', '" + todo.id + "', '" + todo.status + "');";
-        executeQuery(query);
+        String query = "INSERT INTO todos (title, id, status) VALUES (?, ?, ?);";
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)
+        ) {
+            stmt.setString(1, todo.title);
+            stmt.setString(2, todo.id);
+            stmt.setString(3, String.valueOf(todo.status));
+            ResultSet rs = stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
+        @Override
     public Todo find(String id) {
 
         String query = "SELECT * FROM todos WHERE id ='" + id + "';";
